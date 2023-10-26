@@ -2,19 +2,35 @@ use bevy::prelude::*;
 
 use crate::game::components::*;
 
-
-// /// for debug / referennce for using Rapier3D
-// fn setup_physics(mut commands: Commands) {
-//     commands
-//         .spawn(Collider::cuboid(100.0, 0.1, 100.0))
-//         .insert(TransformBundle::from(Transform::from_xyz(0.0, -2.0, 0.0)));
-    
-//     commands
-//         .spawn(RigidBody::Dynamic)
-//         .insert(Collider::ball(0.5))
-//         .insert(Restitution::coefficient(0.7))
-//         .insert(TransformBundle::from(Transform::from_xyz(0.0, 4.0, 0.0)));
-// }
+pub fn camera_controls(
+    mut commands: Commands,
+    mut cam_query: Query<&mut Transform, With<Camera>>,
+    input: Res<Input<KeyCode>>
+)
+{
+    let Ok(mut transform) = cam_query.get_single_mut()
+    else { 
+        println!("Failed to get transform component on camera.");
+        return; 
+    };
+}
+pub fn spawn_player (
+    mut commands: Commands, 
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials : ResMut<Assets<StandardMaterial>>
+)
+{
+    commands.spawn(Player
+    {
+        mesh: PbrBundle
+        {
+            transform: Transform::from_xyz(0.0, 0.0, 0.0),
+            mesh: meshes.add(Mesh::from(shape::Cube::new(1.0))),
+            material: materials.add(Color::AZURE.into()),
+            .. default()
+        }
+    });
+}
 
 pub fn spawn_camera(
     mut commands: Commands
@@ -33,12 +49,11 @@ pub fn spawn_floor(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials : ResMut<Assets<StandardMaterial>>
 ) {
-  
     let floor = PbrBundle
     {
         mesh: meshes.add(Mesh::from(shape::Plane::from_size(250.0))),
         material: materials.add(Color::CYAN.into()),
-        .. default()    
+        .. default()
     };
     
     commands.spawn(floor);

@@ -2,10 +2,7 @@ use bevy::prelude::*;
 use bevy_rapier3d::rapier::prelude::{RigidBodyBuilder, ColliderBuilder};
 
 #[derive(Bundle)]
-struct Player
+pub struct Player
 {
-    transform:TransformBundle,
-    mesh:PbrBundle,
+    pub mesh:PbrBundle,
 }
-
-
